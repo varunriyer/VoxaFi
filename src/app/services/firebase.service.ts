@@ -7,7 +7,10 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  User,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -55,6 +58,16 @@ export class FirebaseService {
 
   async logout(): Promise<void> {
     await signOut(this.auth);
+  }
+
+  async sendPasswordReset(email: string): Promise<void> {
+    await sendPasswordResetEmail(this.auth, email);
+  }
+
+  async googleSignInPopup(): Promise<User> {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(this.auth, provider);
+    return result.user;
   }
 
   // Firestore methods
